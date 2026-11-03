@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f9fc">
+    <meta name="description" content="Convert JPG, PNG and WEBP images into a PDF. Free, fast and private — your files never leave your device.">
+    <title>YASH PDF — Image to PDF Converter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script defer src="js/app.js"></script>
+</head>
+
+<body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <header class="topbar">
+        <a class="brand" href="#" aria-label="YASH     PDF home">
+            <span class="brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2.75h8l4.5 4.5v14H6z"/><path d="M14 2.75v4.5h4.5M8.8 15.5h6.4M8.8 18.2h4.3"/></svg></span>
+            <span>YASH    <span class="brand-light">PDF</span></span>
+        </a>
+        <nav class="nav-links"><a href="#how-it-works">How it works</a><a href="#features">Features</a></nav>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme"><span id="themeIcon">☾</span></button>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="eyebrow"><span class="eyebrow-dot"></span> FREE ONLINE TOOL <span class="eyebrow-separator">·</span> NO SIGN-UP</div>
+            <h1>Your images.<br><span>One perfect PDF.</span></h1>
+            <p class="hero-copy">Turn photos and images into a polished PDF in seconds. Arrange, customize, and download — all right in your browser.</p>
+            <div class="trust-row"><span><i>✓</i> 100% private</span><span><i>✓</i> No file limits imposed by an account</span><span><i>✓</i> Always free</span></div>
+        </section>
+
+        <section class="workspace" id="converter" aria-label="Image to PDF converter">
+            <div class="workspace-heading">
+                <div>
+                    <div class="section-kicker">THE CONVERTER</div>
+                    <h2>Create your PDF</h2>
+                </div>
+                <div class="step-label"><span class="step-number">01</span> Upload <span class="step-line"></span><span class="step-number muted">02</span> Customize <span class="step-line"></span><span class="step-number muted">03</span> Download</div>
+            </div>
+
+            <div class="upload-zone" id="dropZone" tabindex="0" role="button" aria-label="Choose or drop images">
+                <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple hidden>
+                <div class="upload-icon"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M4 15.5v3A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5v-3"/></svg></div>
+                <h3>Drop your images here</h3>
+                <p>or <button class="text-button" id="browseButton" type="button">browse files</button> from your device</p>
+                <div class="format-pills"><span>JPG</span><span>PNG</span><span>WEBP</span></div>
+            </div>
+
+            <div class="editor hidden" id="editor">
+                <div class="editor-top">
+                    <div>
+                        <h3>Your images <span class="count-badge" id="imageCount">0</span></h3>
+                        <p>Drag cards to change the page order.</p>
+                    </div>
+                    <div class="editor-actions"><button class="subtle-button" id="addMoreButton" type="button">＋ Add more</button><button class="clear-button" id="clearButton" type="button">Clear all</button></div>
+                </div>
+                <div class="image-grid" id="imageGrid" aria-live="polite"></div>
+            </div>
+
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <div class="card-title"><span class="card-icon">✦</span>
+                        <div>
+                            <h3>PDF settings</h3>
+                            <p>Make it yours before exporting.</p>
+                        </div>
+                    </div>
+                    <label class="field-label" for="fileName">PDF file name</label>
+                    <div class="filename-wrap"><input id="fileName" type="text" value="document" maxlength="90" placeholder="e.g. My_Notes"><span>.pdf</span></div>
+                    <div class="field-row">
+                        <div class="field"><label class="field-label" for="pageSize">Page size</label><select id="pageSize"><option value="a4">A4</option><option value="a3">A3</option><option value="letter">US Letter</option><option value="legal">Legal</option><option value="image">Original image size</option></select></div>
+                        <div class="field"><label class="field-label" for="orientation">Orientation</label><select id="orientation"><option value="auto">Auto detect</option><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field"><label class="field-label" for="fitMode">Image placement</label><select id="fitMode"><option value="fit">Fit to page</option><option value="fill">Fill page</option><option value="original">Original size</option></select></div>
+                        <div class="field"><label class="field-label" for="margin">Page margin</label><select id="margin"><option value="0">None</option><option value="8" selected>Small</option><option value="16">Medium</option><option value="25">Large</option></select></div>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="quality">Image quality <span class="field-hint" id="qualityHint">High quality</span></label>
+                        <select id="quality"><option value="0.72">Standard · smaller file</option><option value="0.88" selected>High · recommended</option><option value="1">Maximum · larger file</option></select>
+                    </div>
+                </div>
+                <div class="export-card">
+                    <div class="export-orbit">
+                        <div class="pdf-icon"><span>PDF</span><svg viewBox="0 0 24 24"><path d="M6 2.75h8l4.5 4.5v14H6z"/><path d="M14 2.75v4.5h4.5M8.5 15.5h7"/></svg></div>
+                    </div>
+                    <div class="export-copy">
+                        <h3>Ready when you are.</h3>
+                        <p>Your PDF is created locally on this device. Nothing gets uploaded.</p>
+                    </div>
+                    <div class="export-stats">
+                        <div><strong id="summaryPages">0</strong><span>Pages</span></div>
+                        <div><strong id="summarySize">—</strong><span>Est. output</span></div>
+                        <div><strong>Private</strong><span>Processing</span></div>
+                    </div>
+                    <button class="generate-button" id="generateButton" type="button" disabled><span>Generate PDF</span><svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+                    <p class="export-note" id="statusMessage" role="status">Add images to get started.</p>
+                    <a class="download-link hidden" id="downloadLink" href="#" download="document.pdf">Download PDF ↓</a>
+                </div>
+            </div>
+            <div class="privacy-note"><span class="lock">⌑</span><span><strong>Your files stay yours.</strong> Images are processed on your device and are never sent to a server.</span></div>
+        </section>
+
+        <section class="how-section" id="how-it-works">
+            <div class="section-kicker">A FEW SIMPLE STEPS</div>
+            <h2>From image to PDF.<br><span>It's that easy.</span></h2>
+            <div class="steps-grid">
+                <article class="step-card">
+                    <div class="step-visual upload-visual">↑</div><span class="step-index">01 / UPLOAD</span>
+                    <h3>Choose your images</h3>
+                    <p>Select one image or a whole batch from your phone or computer.</p>
+                </article>
+                <article class="step-card">
+                    <div class="step-visual tune-visual">☷</div><span class="step-index">02 / CUSTOMIZE</span>
+                    <h3>Set up your document</h3>
+                    <p>Pick a filename, page size, orientation, margins, and quality.</p>
+                </article>
+                <article class="step-card">
+                    <div class="step-visual download-visual">↓</div><span class="step-index">03 / DOWNLOAD</span>
+                    <h3>Get your PDF</h3>
+                    <p>Generate your document and save it straight to your device.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="features-section" id="features">
+            <div>
+                <div class="section-kicker">MADE TO KEEP IT SIMPLE</div>
+                <h2>Everything you need.<br><span>Nothing you don't.</span></h2>
+            </div>
+            <div class="feature-list">
+                <div class="feature"><span class="feature-symbol">▦</span>
+                    <div>
+                        <h3>Multiple images, one PDF</h3>
+                        <p>Combine all your selected images into a single document.</p>
+                    </div>
+                </div>
+                <div class="feature"><span class="feature-symbol">↕</span>
+                    <div>
+                        <h3>Your order, your pages</h3>
+                        <p>Rearrange images with drag and drop before exporting.</p>
+                    </div>
+                </div>
+                <div class="feature"><span class="feature-symbol">⌑</span>
+                    <div>
+                        <h3>Private by design</h3>
+                        <p>Local browser processing means your images stay on your device.</p>
+                    </div>
+                </div>
+                <div class="feature"><span class="feature-symbol">◈</span>
+                    <div>
+                        <h3>Works across devices</h3>
+                        <p>A responsive experience for phones, tablets, and computers.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer"><a class="brand" href="#"><span class="brand-mark small"><svg viewBox="0 0 24 24"><path d="M6 2.75h8l4.5 4.5v14H6z"/><path d="M14 2.75v4.5h4.5M8.8 15.5h6.4"/></svg></span><span>YASH    <span class="brand-light">PDF</span></span></a><span>Made for simpler documents.</span><span>© <span id="year"></span>        YASH PDF</span>
+    </footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+
+</html>
